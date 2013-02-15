@@ -12,6 +12,13 @@ provides a wrapper around gdebi. Use liek the built in dpkg_package:
       action :install
     end
 
+Can also function as a generic package provider:
+
+    package 'nginx' do
+      provider Chef::Provider::Package::Gdebi
+      source '/vagrant/nginx_1.2.4-precise-1_amd64.deb'
+      action :install
+    end
 
 # Attributes
 
