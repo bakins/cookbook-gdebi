@@ -6,3 +6,5 @@
 # 
 # All rights reserved - Do Not Redistribute
 #
+
+package 'gdebi-core'
