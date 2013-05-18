@@ -1,6 +1,6 @@
 # gdebi cookbook
 
-This version is being deprecated. see https://github.com/bakins/cookbook-gdebi and http://community.opscode.com/cookbooks/gdebi
+This version is being deprecated. see [github](https://github.com/bakins/cookbook-gdebi) and [cookbook community](http://community.opscode.com/cookbooks/gdebi)
 # Requirements
 
 Supports Ubuntu/debian only
