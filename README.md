@@ -30,4 +30,4 @@ default - include before using the provider
 
 # Author
 
-Author:: Brian Akins (<brian.akins@turner.com>)
+Author:: Brian Akins (<brian@akins.org>)
