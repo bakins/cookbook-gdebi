@@ -2,9 +2,11 @@
 # Cookbook Name:: gdebi
 # Recipe:: default
 #
-# Copyright (C) 2013 YOUR_NAME
+# Copyright (C) 2013 Brian Akins
 # 
 # All rights reserved - Do Not Redistribute
 #
 
-package 'gdebi-core'
+include_recipe "apt"
+
+package "gdebi-core"
