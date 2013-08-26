@@ -1,3 +1,5 @@
+require 'open3'
+
 # copied from apt cookbook. avoids a dependency and how to inject apt recipe
 def build_pref(package_name, pin, pin_priority)
   preference_content = "Package: #{package_name}\nPin: #{pin}\nPin-Priority: #{pin_priority}\n"
@@ -24,6 +26,35 @@ def preferences()
   end.run_action(:create)
 end
 
+DPKG_INSTALLED = /^Status: install ok installed/
+DPKG_VERSION = /^Version: (.+)$/
+
+# this is pretty cheesy, but keeps us from downlaoding it if it's already installed
+# we bake some packages into images. more or less copied from dpkg provider
+def installed?
+  if @checked_if_installed
+    return @installed
+  end
+  package_installed = false
+  version = nil
+  Open3.popen3("dpkg -s #{new_resource.package_name}") do |stdin, stdout, stderr|
+    stdout.each_line do |line|
+      case line
+      when DPKG_INSTALLED
+        package_installed = true
+      when DPKG_VERSION
+        if package_installed
+          Chef::Log.debug("#{@new_resource} current version is #{$1}")
+          version = $1
+        end
+      end
+    end
+  end
+
+  @checked_if_installed = true
+  @installed = package_installed && (version == new_resource.version)
+end
+
 action :create do
   preferences
   
@@ -32,13 +63,11 @@ action :create do
   
   pkg_path = ::File.join(Chef::Config[:file_cache_path], pkg_file)
 
-  # technically, we only need to download this
-  # if it's not already installed, but no easy way to 
-  # do that unless we rewrite provider
   remote_file pkg_path do
     source "#{new_resource.mirror}/#{pkg_file}"
     checksum new_resource.checksum
     action :nothing
+    not_if { installed? }
   end.run_action(:create)
   
   g = gdebi_package new_resource.package_name do
@@ -46,6 +75,7 @@ action :create do
     options new_resource.options
     version new_resource.version
     action :nothing
+    not_if { installed? }
   end
   
   g.run_action(:install)
