@@ -6,7 +6,7 @@ Supports Ubuntu/debian only
 
 # Usage
 
-provides a wrapper around gdebi. Use liek the built in dpkg_package:
+provides a wrapper around gdebi. Use like the built in dpkg_package:
 
     gdebi_package '/path/to/package.deb' do
       action :install
