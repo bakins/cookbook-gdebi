@@ -31,7 +31,7 @@ DPKG_VERSION = /^Version: (.+)$/
 
 # this is pretty cheesy, but keeps us from downlaoding it if it's already installed
 # we bake some packages into images. more or less copied from dpkg provider
-def installed?
+def _gdebi_package_installed?
   if @checked_if_installed
     return @installed
   end
@@ -67,7 +67,7 @@ action :create do
     source "#{new_resource.mirror}/#{pkg_file}"
     checksum new_resource.checksum
     action :nothing
-    not_if { installed? }
+    not_if { _gdebi_package_installed? }
   end.run_action(:create)
   
   g = gdebi_package new_resource.package_name do
@@ -75,7 +75,7 @@ action :create do
     options new_resource.options
     version new_resource.version
     action :nothing
-    not_if { installed? }
+    not_if { _gdebi_package_installed? }
   end
   
   g.run_action(:install)
