@@ -1,5 +1,7 @@
 # gdebi cookbook
 
+## This project no longer maintained. Open an issue if you'd like to maintain it.
+
 # Requirements
 
 Supports Ubuntu/debian only
